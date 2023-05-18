@@ -1,13 +1,14 @@
 import express from "express";
-
+import path from "path";
 const app = express();
-const port = 3000;
 
 app.get("/", (req, res) => {
   res.status(200);
   res.json({ message: "Hello World!" });
 });
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.get("/html", (req, res) => {
+  res.status(200);
+  res.sendFile(path.resolve("pages/index.html"));
 });
+
+export default app;
