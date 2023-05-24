@@ -3,7 +3,7 @@ import path from "path";
 import morgan from "morgan";
 import cors from "cors";
 import router from "./router";
-import { protect } from "./modules/auth";
+import { hashPassword, protect } from "./modules/auth";
 
 const app = express();
 
@@ -31,10 +31,22 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello World!" });
 });
 
-// app.get("/html", (req, res) => {
+// app.post("/login", (req, res) => {
+//   const token = login(req.body);
 //   res.status(200);
-//   res.sendFile(path.resolve("pages/index.html"));
+//   res.json({ message: "User loged", token });
 // });
+
+app.post("/signup", (req, res) => {
+  hashPassword(req.body.password);
+  res.status(201);
+  res.json({ message: "User created" });
+});
+
+app.get("/html", (req, res) => {
+  res.status(200);
+  res.sendFile(path.resolve("pages/index.html"));
+});
 
 app.use("/api/v1", protect, router);
 

@@ -1,5 +1,7 @@
-import { log } from "console";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+const saltRounds = 10;
 
 export const createJWT = (user) => {
   const token = jwt.sign(
@@ -7,6 +9,14 @@ export const createJWT = (user) => {
     process.env.JWT_SECRET
   );
   return token;
+};
+
+export const comparePasswords = (password, hash) => {
+  return bcrypt.compareSync(password, hash); // true or fals
+};
+
+export const hashPassword = (password) => {
+  bcrypt.hash(password, saltRounds);
 };
 
 export const protect = (req, res, next) => {
@@ -28,7 +38,6 @@ export const protect = (req, res, next) => {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     req.user = user;
-    console.log("user: ", user);
     next();
   } catch (err) {
     console.log("error: ", err.message);
