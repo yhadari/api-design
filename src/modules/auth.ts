@@ -1,3 +1,4 @@
+import { log } from "console";
 import jwt from "jsonwebtoken";
 
 export const createJWT = (user) => {
@@ -8,7 +9,7 @@ export const createJWT = (user) => {
   return token;
 };
 
-export const protect = (req, res) => {
+export const protect = (req, res, next) => {
   const bearer = req.headers.authorization;
 
   if (!bearer) {
@@ -19,8 +20,18 @@ export const protect = (req, res) => {
 
   const [, token] = bearer.split(" ");
   if (!token) {
-    console.log("here");
+    res.status(401);
+    res.json({ message: "NOt valid token" });
+    return;
+  }
 
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = user;
+    console.log("user: ", user);
+    next();
+  } catch (err) {
+    console.log("error: ", err.message);
     res.status(401);
     res.json({ message: "NOt authorized" });
     return;
