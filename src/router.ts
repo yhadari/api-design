@@ -9,7 +9,7 @@ router.get("/product", (req, res) => {
   res.json({ message: "Products" });
 });
 router.get("/product/:id", () => {});
-router.post("/product/", () => {});
+router.post("/product", () => {});
 router.put("/product/:id", () => {});
 router.delete("/product/:id", () => {});
 
