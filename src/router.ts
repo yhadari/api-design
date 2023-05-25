@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { body } from "express-validator";
+import { validate } from "./modules/middleware";
 
 const router = Router();
 
@@ -7,12 +9,25 @@ const router = Router();
  */
 router.get("/product", (req, res) => {
   console.log("user: ", req.user);
-
   res.json({ message: "Product" });
 });
+
 router.get("/product/:id", () => {});
-router.post("/product", () => {});
-router.put("/product/:id", () => {});
+
+router.post(
+  "/product",
+  body("name").isString(),
+  body("id").isString(),
+  validate,
+  (req, res) => {
+    res.json({ message: "Product created" });
+  }
+);
+
+router.put("/product/:id", body("name").isString(), validate, (req, res) => {
+  res.json({ message: "Product updated" });
+});
+
 router.delete("/product/:id", () => {});
 
 /**
