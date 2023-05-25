@@ -37,11 +37,11 @@ app.get("/", (req, res) => {
 //   res.json({ message: "User loged", token });
 // });
 
-app.post("/signup", (req, res) => {
-  hashPassword(req.body.password);
-  res.status(201);
-  res.json({ message: "User created" });
-});
+// app.post("/signup", (req, res) => {
+//   hashPassword(req.body.password);
+//   res.status(201);
+//   res.json({ message: "User created" });
+// });
 
 app.get("/html", (req, res) => {
   res.status(200);
