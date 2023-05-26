@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, oneOf } from "express-validator";
+import { body } from "express-validator";
 import { validate } from "./modules/middleware";
 
 const router = Router();
@@ -8,8 +8,6 @@ const router = Router();
  * Product
  */
 router.get("/product", (req, res) => {
-  console.log("user: ", req.user);
-  res.json({ message: "Product" });
 });
 
 router.get("/product/:id", () => {});
@@ -31,31 +29,42 @@ router.get("/update", () => {});
 
 router.get("/update/:id", () => {});
 
-router.post("/update/", () => {});
+router.post(
+  "/update/",
+  body("title").isString(),
+  body("body").isString(),
+  () => {}
+);
 
 router.put(
   "/update/:id",
   body("title").optional(),
   body("body").optional(),
-  // oneOf("status", [body("IN_PROGRESS"), body("SHIPED"), body("DEPRECATED")]),
+  body("status").isIn(["IN_PROGRESS", "SHIPED", "DEPRECATED"]),
   body("version").optional(),
   () => {}
 );
 
-router.delete(
-  "/update/:id",
-  body("title").exists().isString(),
-  body("body").exists().isString(),
-  () => {}
-);
+router.delete("/update/:id", () => {});
 
 /**
  * Update Point
  */
 router.get("/updatepoint", () => {});
 router.get("/updatepoint/:id", () => {});
-router.post("/updatepoint/", () => {});
-router.put("/updatepoint/:id", () => {});
+router.post(
+  "/updatepoint/",
+  body("name").isString(),
+  body("description").isString(),
+  body("updateId").isString(),
+  () => {}
+);
+router.put(
+  "/updatepoint/:id",
+  body("name").optional().isString(),
+  body("description").optional().isString(),
+  () => {}
+);
 router.delete("/updatepoint/:id", () => {});
 
 export default router;
