@@ -34,10 +34,11 @@ router.delete("/product/:id", deleteProduct);
 router.get("/update", getUpdates);
 router.get("/update/:id", getOneUpdate);
 router.post(
-  "/update/",
+  "/update",
   body("title").isString(),
   body("body").isString(),
   body("productId").isString(),
+  validate,
   createUpdate
 );
 router.put(
@@ -46,6 +47,7 @@ router.put(
   body("body").optional(),
   body("status").isIn(["IN_PROGRESS", "SHIPED", "DEPRECATED"]).optional(),
   body("version").optional(),
+  validate,
   updateUpdate
 );
 router.delete("/update/:id", deleteUpdate);
@@ -60,12 +62,14 @@ router.post(
   body("name").isString(),
   body("description").isString(),
   body("updateId").isString(),
+  validate,
   () => {}
 );
 router.put(
   "/updatepoint/:id",
   body("name").optional().isString(),
   body("description").optional().isString(),
+  validate,
   () => {}
 );
 router.delete("/updatepoint/:id", () => {});

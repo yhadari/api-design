@@ -26,7 +26,7 @@ app.use(customLogger("middleware"));
  * Routes
  */
 
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
   res.status(200);
   res.json({ message: "Hello World!" });
 });
