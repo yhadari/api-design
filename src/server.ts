@@ -4,6 +4,8 @@ import cors from "cors";
 import router from "./router";
 import { protect } from "./modules/auth";
 import { createNewUser, signin } from "./handlers/user";
+import { body } from "express-validator";
+import { validate } from "./modules/middleware";
 
 const app = express();
 
@@ -31,9 +33,22 @@ app.get("/", (req, res, next) => {
   res.json({ message: "Hello World!" });
 });
 
-app.post("/user", createNewUser);
+app.post(
+  "/user",
+  body("username").isString(),
+  body("password").isString(),
+  validate,
+  createNewUser
+);
 app.post("/signin", signin);
 
 app.use("/api/v1", protect, router);
+
+app.use((err, req, res, next) => {
+  if (err.type === "auth") res.status(401).json({ message: "unauthorized" });
+  else if (err.type === "input")
+    res.status(400).json({ message: "invalid input" });
+  else res.status(500).json({ message: "oops, thats on us" });
+});
 
 export default app;
